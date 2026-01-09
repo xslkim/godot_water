@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://w5i1gwmbt6ta"]
+
+[ext_resource type="Script" uid="uid://btgcm5d6dymbd" path="res://script/WaveCascadeParameters.cs" id="1_13v2c"]
+
+[resource]
+script = ExtResource("1_13v2c")

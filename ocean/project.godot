@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="ocean"
-config/features=PackedStringArray("4.5", "Forward Plus")
+run/main_scene="uid://8en68gt3ho1g"
+config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [dotnet]

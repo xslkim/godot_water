@@ -1,0 +1,36 @@
+[gd_scene load_steps=11 format=3 uid="uid://8en68gt3ho1g"]
+
+[ext_resource type="Texture2D" uid="uid://dtto1hd6rsv7t" path="res://assets/skybox.png" id="1_a202f"]
+[ext_resource type="ArrayMesh" uid="uid://bvuwgkjttprvs" path="res://assets/water/clipmap_high.obj" id="2_a0tk4"]
+[ext_resource type="Script" uid="uid://dk6k8suhgf44x" path="res://script/Water.cs" id="2_noarx"]
+[ext_resource type="Script" uid="uid://btgcm5d6dymbd" path="res://script/WaveCascadeParameters.cs" id="4_jka67"]
+[ext_resource type="Resource" uid="uid://c0srh46q8qm2p" path="res://assets/wave1.tres" id="5_wc5p8"]
+[ext_resource type="Resource" uid="uid://w5i1gwmbt6ta" path="res://assets/wave2.tres" id="6_jsk3o"]
+[ext_resource type="Resource" uid="uid://b3qn6lfs05fpp" path="res://assets/wave3.tres" id="7_4arys"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_noarx"]
+panorama = ExtResource("1_a202f")
+
+[sub_resource type="Sky" id="Sky_a202f"]
+sky_material = SubResource("PanoramaSkyMaterial_noarx")
+
+[sub_resource type="Environment" id="Environment_noarx"]
+background_mode = 2
+sky = SubResource("Sky_a202f")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_noarx")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.016254, 36.22847, -19.180878)
+mesh = ExtResource("2_a0tk4")
+script = ExtResource("2_noarx")
+WaveCascades = Array[ExtResource("4_jka67")]([ExtResource("5_wc5p8"), ExtResource("6_jsk3o"), ExtResource("7_4arys")])
