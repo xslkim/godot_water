@@ -6,6 +6,8 @@ public partial class compute_shader_test : Node
 
 	[Export]
 	public SubViewport left_viewport;
+
+	[Export]
 	public SubViewport right_viewport;
 
 	RenderingDevice rd;
@@ -31,7 +33,7 @@ public partial class compute_shader_test : Node
 		RDUniform uniform = new RDUniform
 		{
 			UniformType = RenderingDevice.UniformType.StorageBuffer,
-			Binding = 0
+			Binding = 0,
 		};
 		uniform.AddId(csBuffer);
 		var uniformSet = rd.UniformSetCreate([uniform], shader, 0);
@@ -45,16 +47,30 @@ public partial class compute_shader_test : Node
 		rd.ComputeListEnd();
 	}
 
-
+	static int frameCount = 0;
 	void csExe()
-	{
-		rd.Submit();
-		rd.Sync();
-		byte[] outputBytes = rd.BufferGetData(csBuffer);
-		float[] output = new float[input.Length];
-		Buffer.BlockCopy(outputBytes, 0, output, 0, outputBytes.Length);
-		GD.Print("Input: ", string.Join(", ", input));
-		GD.Print("Output: ", string.Join(", ", output));
+	{	
+		if(frameCount++ % 30 == 0)
+		{
+			for(int i = 0; i < input.Length; i++)
+			{
+				input[i] = (float)frameCount;
+			}
+
+			byte[] inputBytes = new byte[input.Length * sizeof(float)];
+			Buffer.BlockCopy(input, 0, inputBytes, 0, inputBytes.Length);
+			rd.BufferUpdate(csBuffer, 0, (uint)input.Length, inputBytes);
+
+			rd.Submit();
+			rd.Sync();
+			byte[] outputBytes = rd.BufferGetData(csBuffer);
+			float[] output = new float[input.Length];
+			Buffer.BlockCopy(outputBytes, 0, output, 0, outputBytes.Length);
+			GD.Print("Input: ", string.Join(", ", input));
+			GD.Print("Output: ", string.Join(", ", output));
+		}
+			
+		
 	}
 
 	
@@ -66,6 +82,7 @@ public partial class compute_shader_test : Node
 
 	public override void _Process(double delta)
 	{
+		
 		csExe();
 	}
 }

@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://ddd0qigjh7f86"
+path="res://.godot/imported/texture_merge.glsl-3661be1770229a55e0f78af98f114e70.res"
+
+[deps]
+
+source_file="res://shaders/texture_merge.glsl"
+dest_files=["res://.godot/imported/texture_merge.glsl-3661be1770229a55e0f78af98f114e70.res"]
+
+[params]
+
