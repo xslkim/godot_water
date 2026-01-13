@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://1s1rvpup1lj2"]
+[gd_scene load_steps=15 format=3 uid="uid://1s1rvpup1lj2"]
 
 [ext_resource type="Script" uid="uid://b3tj0dpachjl4" path="res://script/compute_shader_merge_image.cs" id="1_qcsj4"]
 
@@ -35,6 +35,8 @@ albedo_color = Color(0.06666667, 0.4117647, 1, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_xcli0"]
 material = SubResource("StandardMaterial3D_qcsj4")
 
+[sub_resource type="BoxMesh" id="BoxMesh_qcsj4"]
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_qcsj4"]
 viewport_path = NodePath("Right")
 
@@ -69,37 +71,50 @@ mesh = SubResource("CapsuleMesh_2x8vs")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 0)
 mesh = SubResource("SphereMesh_xcli0")
 
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="env"]
+transform = Transform3D(200, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.1256223)
+mesh = SubResource("BoxMesh_qcsj4")
+
 [node name="Left" type="SubViewport" parent="."]
-size = Vector2i(1920, 1080)
+size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 20)
 keep_aspect = 0
 fov = 52.0
 
 [node name="Right" type="SubViewport" parent="."]
-size = Vector2i(1920, 1080)
+size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Right"]
-transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 0, 0, 10)
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 0, 3, 20)
 keep_aspect = 0
 fov = 52.0
 
 [node name="UI_Right" type="TextureRect" parent="."]
-offset_left = 2190.0
-offset_top = 290.0
-offset_right = 4110.0
-offset_bottom = 1370.0
+modulate = Color(1, 1, 1, 0.5294118)
+offset_left = 835.0
+offset_top = 653.0
+offset_right = 1475.0
+offset_bottom = 1013.0
 texture = SubResource("ViewportTexture_qcsj4")
 
 [node name="UI_Left" type="TextureRect" parent="."]
-offset_left = 130.0
-offset_top = 298.0
-offset_right = 2050.0
-offset_bottom = 1378.0
+modulate = Color(1, 1, 1, 0.49411765)
+offset_left = 135.0
+offset_top = 652.0
+offset_right = 775.0
+offset_bottom = 1012.0
 texture = SubResource("ViewportTexture_2x8vs")
 
-[node name="Script" type="Node" parent="."]
+[node name="Script" type="Node" parent="." node_paths=PackedStringArray("left_viewport", "right_viewport", "resultDisplay")]
 script = ExtResource("1_qcsj4")
+left_viewport = NodePath("../Left")
+right_viewport = NodePath("../Right")
+resultDisplay = NodePath("../result")
+
+[node name="result" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
