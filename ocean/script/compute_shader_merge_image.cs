@@ -1,7 +1,9 @@
 using Godot;
 using System;
+using System;
+using System.Runtime.InteropServices;
 
-
+[Tool]
 public partial class compute_shader_merge_image : Node
 {
 
@@ -39,6 +41,65 @@ public partial class compute_shader_merge_image : Node
 
         // 等待一帧确保纹理已创建
         GetTree().CreateTimer(0).Timeout += InitializeAfterFirstFrame;
+    }
+
+    const int outputWidth = 1920;
+    const int outputHeight = 1080;
+
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 4)] // 4字节对齐
+    public struct ComputeUniforms
+    {
+        public float fov_x;      // 4 bytes
+        public float rotate_x;   // 4 bytes
+        public float rotate_y;   // 4 bytes
+        public float rotate_z;   // 4 bytes
+        public float width;      // 4 bytes
+        public float height;     // 4 bytes
+        public float fx;         // 4 bytes
+        public float fy;         // 4 bytes
+        public float cx;         // 4 bytes
+        public float cy;         // 4 bytes
+        
+        // 可选：添加两个float填充到16字节对齐（如果GLSL需要）
+        private float padding1;
+        private float padding2;
+        
+        public ComputeUniforms()
+        {
+            fov_x = 52f;
+            rotate_x = 0;
+            rotate_y = 10;
+            rotate_z = 0;
+            width = 1920;
+            height = 1080;
+            fx = 1948f;
+            fy = 1948f;
+            cx = 960;
+            cy = 540;
+            padding1 = 0;
+            padding2 = 0;
+        }
+    }
+
+    private byte[] SerializeUniforms(ComputeUniforms uniforms)
+    {
+        int size = System.Runtime.InteropServices.Marshal.SizeOf<ComputeUniforms>();
+        byte[] bytes = new byte[size];
+        
+        IntPtr ptr = System.Runtime.InteropServices.Marshal.AllocHGlobal(size);
+        try
+        {
+            System.Runtime.InteropServices.Marshal.StructureToPtr(uniforms, ptr, false);
+            System.Runtime.InteropServices.Marshal.Copy(ptr, bytes, 0, size);
+        }
+        finally
+        {
+            System.Runtime.InteropServices.Marshal.FreeHGlobal(ptr);
+        }
+        
+        return bytes;
     }
 
 	void InitializeAfterFirstFrame()
@@ -83,8 +144,8 @@ public partial class compute_shader_merge_image : Node
         // 输出纹理
         outputTexRid = rd.TextureCreate(new RDTextureFormat
         {
-            Width = (uint)width,
-            Height = (uint)height,
+            Width = (uint)outputWidth,
+            Height = (uint)outputHeight,
             Format = format,
             UsageBits = usage
         }, new RDTextureView());
@@ -119,6 +180,28 @@ public partial class compute_shader_merge_image : Node
 		uniformOutput.AddId(outputTexRid);
 		uniforms.Add(uniformOutput);
 
+        
+
+        computeUniforms = new ComputeUniforms();
+        
+        // 计算结构体大小并预分配字节数组
+        _uniformSize = Marshal.SizeOf<ComputeUniforms>();
+        _uniformBytes = new byte[_uniformSize];
+        
+        UpdateUniformBufferData(computeUniforms);
+        _uniformBuffer = rd.UniformBufferCreate((uint)_uniformSize, _uniformBytes);
+
+        
+        var uniformParams = new RDUniform
+        {
+            UniformType = RenderingDevice.UniformType.UniformBuffer,
+            Binding = 3,
+        };
+        uniformParams.AddId(_uniformBuffer);
+        uniforms.Add(uniformParams);
+        
+
+
 		// 创建 UniformSet
 		uniformSet = rd.UniformSetCreate(uniforms, shader, 0);
 
@@ -126,6 +209,17 @@ public partial class compute_shader_merge_image : Node
 		pipeline = rd.ComputePipelineCreate(shader);
 
 	}
+
+    Rid _uniformBuffer;
+
+    private byte[] _uniformBytes;
+
+    int _uniformSize = Marshal.SizeOf<ComputeUniforms>();
+
+    
+    ComputeUniforms computeUniforms = new ComputeUniforms();
+        
+
    	private void UploadImageDataToTexture(Rid texture, Image image)
     {
         if (image.GetFormat() != Image.Format.Rgba8)
@@ -161,11 +255,9 @@ public partial class compute_shader_merge_image : Node
         UploadImageDataToTexture(leftStorageTex, leftImg);
         UploadImageDataToTexture(rightStorageTex, rightImg);
 
-        // Dispatch compute
-        int width = leftTex.GetWidth();
-        int height = leftTex.GetHeight();
-        uint gx = (uint)Math.Ceiling(width / 8f);
-        uint gy = (uint)Math.Ceiling(height / 8f);
+
+        uint gx = (uint)Math.Ceiling(outputWidth / 8f);
+        uint gy = (uint)Math.Ceiling(outputHeight / 8f);
 
         long computeList = rd.ComputeListBegin();
         rd.ComputeListBindComputePipeline(computeList, pipeline);
@@ -178,15 +270,39 @@ public partial class compute_shader_merge_image : Node
 
         // Get result and display
         byte[] resultData = rd.TextureGetData(outputTexRid, 0);
-        Image resultImg = Image.CreateFromData(width, height, false, Image.Format.Rgba8, resultData);
+        Image resultImg = Image.CreateFromData(outputWidth, outputHeight, false, Image.Format.Rgba8, resultData);
         resultDisplay.Texture = ImageTexture.CreateFromImage(resultImg);
     }
+
+    private void UpdateUniformBufferData(ComputeUniforms uniforms)
+    {
+        IntPtr ptr = Marshal.AllocHGlobal(_uniformSize);
+        try
+        {
+            Marshal.StructureToPtr(uniforms, ptr, false);
+            Marshal.Copy(ptr, _uniformBytes, 0, _uniformSize);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(ptr);
+        }
+    }
+
+    [Export]
+    public float fov_x = 52f;
+    [Export]
+    public float rotate_y = 30f;
 
 	static int frameCount = 1;
 	public override void _Process(double delta)
 	{
-		if(frameCount++ % 30 == 0)
+		if(frameCount++ % 10 == 0)
 		{
+            computeUniforms.fov_x = fov_x;
+            computeUniforms.rotate_y = rotate_y;
+            UpdateUniformBufferData(computeUniforms);
+        
+            rd.BufferUpdate(_uniformBuffer, 0, (uint)_uniformBytes.Length, _uniformBytes);
 			ExecuteComputeDispatch();
 		}
 	}

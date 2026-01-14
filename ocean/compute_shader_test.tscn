@@ -68,7 +68,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 mesh = SubResource("CapsuleMesh_2x8vs")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="env"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 0)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 5.529253, 0.32075214, 7.596129)
 mesh = SubResource("SphereMesh_xcli0")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="env"]
@@ -76,7 +76,7 @@ transform = Transform3D(200, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.1256223)
 mesh = SubResource("BoxMesh_qcsj4")
 
 [node name="Left" type="SubViewport" parent="."]
-size = Vector2i(640, 360)
+size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Left"]
@@ -85,28 +85,34 @@ keep_aspect = 0
 fov = 52.0
 
 [node name="Right" type="SubViewport" parent="."]
-size = Vector2i(640, 360)
+size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Right"]
-transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 0, 3, 20)
+transform = Transform3D(0.8660253, 0, -0.49999997, 0, 1, 0, 0.49999997, 0, 0.8660253, 0, 3, 20)
 keep_aspect = 0
 fov = 52.0
 
 [node name="UI_Right" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0.5294118)
-offset_left = 835.0
-offset_top = 653.0
-offset_right = 1475.0
-offset_bottom = 1013.0
+offset_left = 1100.0
+offset_top = 688.0
+offset_right = 3020.0
+offset_bottom = 1768.0
+scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_qcsj4")
 
 [node name="UI_Left" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0.49411765)
-offset_left = 135.0
-offset_top = 652.0
-offset_right = 775.0
-offset_bottom = 1012.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 120.0
+offset_top = -597.0
+offset_right = 2040.0
+offset_bottom = 483.0
+grow_vertical = 0
+scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_2x8vs")
 
 [node name="Script" type="Node" parent="." node_paths=PackedStringArray("left_viewport", "right_viewport", "resultDisplay")]
@@ -116,5 +122,9 @@ right_viewport = NodePath("../Right")
 resultDisplay = NodePath("../result")
 
 [node name="result" type="TextureRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+modulate = Color(1, 0.7372549, 1, 0.68235296)
+offset_left = 1206.0
+offset_top = 67.0
+offset_right = 3126.0
+offset_bottom = 1147.0
+scale = Vector2(0.5, 0.5)
