@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="ocean"
-run/main_scene="uid://1s1rvpup1lj2"
+run/main_scene="uid://c2wbws5kqoush"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=2300
-window/size/viewport_height=1280
+window/size/viewport_width=3840
+window/size/viewport_height=2160
 
 [dotnet]
 

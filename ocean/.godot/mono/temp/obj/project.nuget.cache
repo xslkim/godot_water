@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "8G+SniZ1ZrQ=",
+  "success": true,
+  "projectFilePath": "D:\\code\\godot_water\\ocean\\ocean.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\elane\\.nuget\\packages\\godot.sourcegenerators\\4.6.0-dev\\godot.sourcegenerators.4.6.0-dev.nupkg.sha512",
+    "C:\\Users\\elane\\.nuget\\packages\\godotsharp\\4.6.0-dev\\godotsharp.4.6.0-dev.nupkg.sha512",
+    "C:\\Users\\elane\\.nuget\\packages\\godotsharpeditor\\4.6.0-dev\\godotsharpeditor.4.6.0-dev.nupkg.sha512"
+  ],
+  "logs": []
+}

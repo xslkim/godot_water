@@ -1,0 +1,399 @@
+[gd_scene load_steps=26 format=3 uid="uid://digii62dfsx42"]
+
+[ext_resource type="Material" uid="uid://dsfg2esujfyij" path="res://Materials/mat1.tres" id="1_lnpje"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2x8vs"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_qcsj4"]
+sky_material = SubResource("ProceduralSkyMaterial_2x8vs")
+
+[sub_resource type="Environment" id="Environment_xcli0"]
+background_mode = 2
+sky = SubResource("Sky_qcsj4")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mb0mj"]
+albedo_color = Color(0.9272901, 0, 0.24915412, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2x8vs"]
+material = SubResource("StandardMaterial3D_mb0mj")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2x8vs"]
+albedo_color = Color(0.4351923, 0.43519226, 0.43519226, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2x8vs"]
+material = SubResource("StandardMaterial3D_2x8vs")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_2x8vs"]
+material = ExtResource("1_lnpje")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lnpje"]
+albedo_color = Color(1, 0.54509807, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qcsj4"]
+albedo_color = Color(0.06666667, 0.4117647, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_xcli0"]
+material = SubResource("StandardMaterial3D_qcsj4")
+
+[sub_resource type="BoxMesh" id="BoxMesh_qcsj4"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qcsj4"]
+viewport_path = NodePath("Right")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_2x8vs"]
+viewport_path = NodePath("Left")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_po782"]
+viewport_path = NodePath("Left")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_lnpje"]
+viewport_path = NodePath("Right5")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_jq1x4"]
+viewport_path = NodePath("Right10")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_svvfb"]
+viewport_path = NodePath("Right15")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_8hojv"]
+viewport_path = NodePath("Right20")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qj7nf"]
+viewport_path = NodePath("Right25")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3du0l"]
+viewport_path = NodePath("Right30")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_833nb"]
+viewport_path = NodePath("Right35")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_605kl"]
+viewport_path = NodePath("Right40")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bqkbb"]
+viewport_path = NodePath("Right45")
+
+[node name="ComputeShaderTest" type="Node3D"]
+
+[node name="env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="env"]
+environment = SubResource("Environment_xcli0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="env"]
+mesh = SubResource("BoxMesh_2x8vs")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="env"]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("PlaneMesh_2x8vs")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0581474, 0, 0)
+mesh = SubResource("CapsuleMesh_2x8vs")
+surface_material_override/0 = SubResource("StandardMaterial3D_lnpje")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.282606, 0, 0)
+mesh = SubResource("CapsuleMesh_2x8vs")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="env"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 5.529253, 0.32075214, 7.596129)
+mesh = SubResource("SphereMesh_xcli0")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="env"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 5.769, 0.321, 7.596)
+mesh = SubResource("SphereMesh_xcli0")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="env"]
+transform = Transform3D(200, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.1256223)
+mesh = SubResource("BoxMesh_qcsj4")
+
+[node name="Left" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right"]
+transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right5" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right5"]
+transform = Transform3D(0.9961946, 0, -0.08715573, 0, 1, 0, 0.08715573, 0, 0.9961946, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right10" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right10"]
+transform = Transform3D(0.9848076, 0, -0.17364816, 0, 1, 0, 0.17364816, 0, 0.9848076, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right15" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right15"]
+transform = Transform3D(0.96592563, 0, -0.25881898, 0, 1, 0, 0.25881898, 0, 0.96592563, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right20" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right20"]
+transform = Transform3D(0.9396924, 0, -0.34202003, 0, 1, 0, 0.34202003, 0, 0.9396924, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right25" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right25"]
+transform = Transform3D(0.90630746, 0, -0.42261815, 0, 1, 0, 0.42261815, 0, 0.90630746, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right30" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right30"]
+transform = Transform3D(0.8660251, 0, -0.49999982, 0, 1, 0, 0.49999982, 0, 0.8660251, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right35" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right35"]
+transform = Transform3D(0.81915176, 0, -0.5735763, 0, 1, 0, 0.5735763, 0, 0.81915176, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right40" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right40"]
+transform = Transform3D(0.76604414, 0, -0.64278734, 0, 1, 0, 0.64278734, 0, 0.76604414, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="Right45" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Right45"]
+transform = Transform3D(0.7071065, 0, -0.7071065, 0, 1, 0, 0.7071065, 0, 0.7071065, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="UI_Right" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.5882353)
+offset_left = 1630.0
+offset_top = 1200.0
+offset_right = 3550.0
+offset_bottom = 2280.0
+texture = SubResource("ViewportTexture_qcsj4")
+
+[node name="UI_Left" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.5882353)
+offset_top = 1200.0
+offset_right = 1920.0
+offset_bottom = 2280.0
+texture = SubResource("ViewportTexture_2x8vs")
+
+[node name="out0" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1630.0
+offset_bottom = 1080.0
+
+[node name="UI" type="TextureRect" parent="out0"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_po782")
+
+[node name="out5" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1630.0
+offset_top = 10.0
+offset_right = 1666.0
+offset_bottom = 1090.0
+
+[node name="UI" type="TextureRect" parent="out5"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -1442.0
+offset_right = 478.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_lnpje")
+
+[node name="out10" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1666.0
+offset_top = 12.0
+offset_right = 1702.0
+offset_bottom = 1092.0
+
+[node name="UI" type="TextureRect" parent="out10"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -1296.0
+offset_right = 624.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_jq1x4")
+
+[node name="out15" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1702.0
+offset_top = 17.0
+offset_right = 1738.0
+offset_bottom = 1097.0
+
+[node name="UI" type="TextureRect" parent="out15"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -1148.0
+offset_right = 772.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_svvfb")
+
+[node name="out20" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1738.0
+offset_top = 17.0
+offset_right = 1774.0
+offset_bottom = 1097.0
+
+[node name="UI" type="TextureRect" parent="out20"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -1002.0
+offset_right = 918.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_8hojv")
+
+[node name="out25" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1774.0
+offset_top = 19.0
+offset_right = 1810.0
+offset_bottom = 1099.0
+
+[node name="UI" type="TextureRect" parent="out25"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -866.0
+offset_right = 1054.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_qj7nf")
+
+[node name="out30" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1810.0
+offset_top = 16.0
+offset_right = 1846.0
+offset_bottom = 1096.0
+
+[node name="UI" type="TextureRect" parent="out30"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -728.0
+offset_right = 1192.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_3du0l")
+
+[node name="out35" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1846.0
+offset_top = 13.0
+offset_right = 1882.0
+offset_bottom = 1093.0
+
+[node name="UI" type="TextureRect" parent="out35"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -585.0
+offset_right = 1335.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_833nb")
+
+[node name="out40" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1882.0
+offset_top = 10.0
+offset_right = 1918.0
+offset_bottom = 1090.0
+
+[node name="UI" type="TextureRect" parent="out40"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -444.0
+offset_right = 1476.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_605kl")
+
+[node name="out45" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1918.0
+offset_right = 3548.0
+offset_bottom = 1080.0
+
+[node name="UI" type="TextureRect" parent="out45"]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+offset_left = -288.0
+offset_right = 1632.0
+offset_bottom = 1080.0
+texture = SubResource("ViewportTexture_bqkbb")
