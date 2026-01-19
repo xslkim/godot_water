@@ -1,6 +1,7 @@
-[gd_scene load_steps=19 format=3 uid="uid://c2wbws5kqoush"]
+[gd_scene load_steps=20 format=3 uid="uid://c2wbws5kqoush"]
 
 [ext_resource type="Material" uid="uid://dsfg2esujfyij" path="res://Materials/mat1.tres" id="1_d61hk"]
+[ext_resource type="Script" uid="uid://bxjkqar2fnote" path="res://script/test4.cs" id="2_qxfyu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2x8vs"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -56,7 +57,7 @@ viewport_path = NodePath("Right22_5")
 [sub_resource type="ViewportTexture" id="ViewportTexture_bqkbb"]
 viewport_path = NodePath("Right45")
 
-[node name="ComputeShaderTest" type="Node3D"]
+[node name="Test4" type="Node3D"]
 
 [node name="env" type="Node3D" parent="."]
 
@@ -133,48 +134,61 @@ transform = Transform3D(0.7071065, 0, -0.7071065, 0, 1, 0, 0.7071065, 0, 0.70710
 keep_aspect = 0
 fov = 52.0
 
-[node name="UI_Right" type="TextureRect" parent="."]
+[node name="Node" type="Node" parent="." node_paths=PackedStringArray("left_viewport", "right_viewport", "resultDisplay")]
+script = ExtResource("2_qxfyu")
+left_viewport = NodePath("../Left")
+right_viewport = NodePath("../Right")
+resultDisplay = NodePath("../Panel/output")
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 2650.0
+offset_bottom = 1600.0
+scale = Vector2(0.7, 0.7)
+
+[node name="UI_Right" type="TextureRect" parent="Panel"]
 modulate = Color(1, 1, 1, 0.5882353)
+layout_mode = 0
 offset_left = 1630.0
 offset_top = 1200.0
 offset_right = 3550.0
 offset_bottom = 2280.0
 texture = SubResource("ViewportTexture_qcsj4")
 
-[node name="UI_Left" type="TextureRect" parent="."]
+[node name="UI_Left" type="TextureRect" parent="Panel"]
 modulate = Color(1, 1, 1, 0.5882353)
+layout_mode = 0
 offset_top = 1200.0
 offset_right = 1920.0
 offset_bottom = 2280.0
 texture = SubResource("ViewportTexture_2x8vs")
 
-[node name="ShowOut" type="Control" parent="."]
-layout_mode = 3
+[node name="ShowOut" type="Control" parent="Panel"]
 anchors_preset = 0
+offset_top = 800.0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 840.0
 
-[node name="out0" type="Control" parent="ShowOut"]
+[node name="out0" type="Control" parent="Panel/ShowOut"]
 clip_contents = true
 anchors_preset = 0
 offset_right = 1630.0
 offset_bottom = 1080.0
 
-[node name="UI" type="TextureRect" parent="ShowOut/out0"]
+[node name="UI" type="TextureRect" parent="Panel/ShowOut/out0"]
 modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 1
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = SubResource("ViewportTexture_po782")
 
-[node name="out22_5" type="Control" parent="ShowOut"]
+[node name="out22_5" type="Control" parent="Panel/ShowOut"]
 clip_contents = true
 anchors_preset = 0
 offset_left = 1626.0
 offset_right = 1916.0
 offset_bottom = 1080.0
 
-[node name="UI" type="TextureRect" parent="ShowOut/out22_5"]
+[node name="UI" type="TextureRect" parent="Panel/ShowOut/out22_5"]
 modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 1
 offset_left = -800.0
@@ -182,17 +196,24 @@ offset_right = 1120.0
 offset_bottom = 1080.0
 texture = SubResource("ViewportTexture_6i7kp")
 
-[node name="out45" type="Control" parent="ShowOut"]
+[node name="out45" type="Control" parent="Panel/ShowOut"]
 clip_contents = true
 anchors_preset = 0
 offset_left = 1918.0
 offset_right = 3548.0
 offset_bottom = 1080.0
 
-[node name="UI" type="TextureRect" parent="ShowOut/out45"]
+[node name="UI" type="TextureRect" parent="Panel/ShowOut/out45"]
 modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 1
 offset_left = -288.0
 offset_right = 1632.0
 offset_bottom = 1080.0
 texture = SubResource("ViewportTexture_bqkbb")
+
+[node name="output" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = -1668.5715
+offset_top = 57.14286
+offset_right = 3575.4285
+offset_bottom = 1137.1428
