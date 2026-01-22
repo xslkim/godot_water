@@ -9,6 +9,9 @@ public partial class test4 : Node
 	[Export]
 	public SubViewport left_viewport;
 
+    [Export]
+	public SubViewport front_viewport;
+
 	[Export]
 	public SubViewport right_viewport;
 
@@ -24,9 +27,11 @@ public partial class test4 : Node
 
 // 中间存储纹理（带 StorageBit）
     private Rid leftStorageTex;
+    private Rid frontStorageTex;
     private Rid rightStorageTex;
 
 	private Rid leftDefaultTexRid;
+    private Rid frontDefaultTexRid;
     private Rid rightDefaultTexRid;
 
     float outputWidth;
@@ -38,54 +43,65 @@ public partial class test4 : Node
         outputHeight = resultDisplay.GetRect().Size.Y;
         // 获取 SubViewport 默认纹理的 RID（只读，无 StorageBit）
         Rid leftVP = left_viewport.GetViewportRid();
+        Rid frontVP = front_viewport.GetViewportRid();
         Rid rightVP = right_viewport.GetViewportRid();
 
         leftDefaultTexRid = RenderingServer.ViewportGetTexture(leftVP);
+        frontDefaultTexRid = RenderingServer.ViewportGetTexture(frontVP);
         rightDefaultTexRid = RenderingServer.ViewportGetTexture(rightVP);
 
         // 等待一帧确保纹理已创建
         GetTree().CreateTimer(0).Timeout += InitializeAfterFirstFrame;
     }
 
+
     [StructLayout(LayoutKind.Sequential, Pack = 4)] // 4字节对齐
     public struct CameraParameter
     {
-        public float rotate_x;   // 4 bytes
-        public float rotate_y;   // 4 bytes
-        public float rotate_z;   // 4 bytes
-        public float width;      // 4 bytes
-        public float height;     // 4 bytes
+        public Vector4 position;
+        public Vector4 rotation; 
 
         public float fx;         // 4 bytes
         public float fy;         // 4 bytes
         public float cx;         // 4 bytes
         public float cy;         // 4 bytes
+        public float w;         // 4 bytes
+        public float h;         // 4 bytes
 
         private float _padding1; // offset 36
         private float _padding2; // offset 40
-        private float _padding3; // offset 44
         
         
         public CameraParameter()
         {
-            rotate_x = 0;
-            rotate_y = 0;
-            rotate_z = 0;
-            width = 1920;
-            height = 1080;
-            fx = 1948f;
-            fy = 1948f;
+            rotation.X = 0;
+            rotation.Y = 0;
+            rotation.Z = 0;
+            position.X = 0;
+            position.Y = 0;
+            position.Z = 0;
+            w = 1920;
+            h = 1080;
+            fx = 1967f;
+            fy = 1967f;
             cx = 960;
             cy = 540;
         }
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 4)] // 4字节对齐
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct ComputeUniforms
     {
-        public CameraParameter left_camera;    // 36 bytes
-        public CameraParameter right_camera;   // 36 bytes
-        
+        public CameraParameter left_camera;
+        public CameraParameter front_camera;
+        public CameraParameter right_camera;
+
+        public ComputeUniforms()
+        {
+            left_camera = new CameraParameter();
+            front_camera = new CameraParameter();
+            right_camera = new CameraParameter();
+        }
     }
 
 	void InitializeAfterFirstFrame()
@@ -112,6 +128,14 @@ public partial class test4 : Node
 
         // 创建带 StorageBit 的中间纹理
         leftStorageTex = rd.TextureCreate(new RDTextureFormat
+        {
+            Width = (uint)width,
+            Height = (uint)height,
+            Format = format,
+            UsageBits = usage
+        }, new RDTextureView());
+
+        frontStorageTex = rd.TextureCreate(new RDTextureFormat
         {
             Width = (uint)width,
             Height = (uint)height,
@@ -150,10 +174,18 @@ public partial class test4 : Node
 		uniformLeft.AddId(leftStorageTex);
 		uniforms.Add(uniformLeft);
 
-		var uniformRight = new RDUniform
+        var uniformFront = new RDUniform
 		{
 			UniformType = RenderingDevice.UniformType.Texture,
 			Binding = 1,
+		};
+		uniformFront.AddId(frontStorageTex);
+		uniforms.Add(uniformFront);
+
+		var uniformRight = new RDUniform
+		{
+			UniformType = RenderingDevice.UniformType.Texture,
+			Binding = 2,
 		};
 		uniformRight.AddId(rightStorageTex);
 		uniforms.Add(uniformRight);
@@ -161,7 +193,7 @@ public partial class test4 : Node
 		var uniformOutput = new RDUniform
 		{
 			UniformType = RenderingDevice.UniformType.Image,
-			Binding = 2,
+			Binding = 3,
 		};
 		uniformOutput.AddId(outputTexRid);
 		uniforms.Add(uniformOutput);
@@ -169,7 +201,7 @@ public partial class test4 : Node
         
 
         computeUniforms = new ComputeUniforms();
-        initComputeUniforms(computeUniforms);
+        initComputeUniforms(ref computeUniforms);
         
         // 计算结构体大小并预分配字节数组
         _uniformSize = Marshal.SizeOf<ComputeUniforms>();
@@ -182,7 +214,7 @@ public partial class test4 : Node
         var uniformParams = new RDUniform
         {
             UniformType = RenderingDevice.UniformType.UniformBuffer,
-            Binding = 3,
+            Binding = 4,
         };
         uniformParams.AddId(_uniformBuffer);
         uniforms.Add(uniformParams);
@@ -198,11 +230,11 @@ public partial class test4 : Node
         isInitialized = true;
 	}
 
-    void initComputeUniforms(ComputeUniforms uniforms)
+    void initComputeUniforms(ref ComputeUniforms uniforms)
     {
-        uniforms.left_camera = new CameraParameter();
-        uniforms.right_camera = new CameraParameter();
-        uniforms.right_camera.rotate_y = 45f;
+        uniforms.left_camera.rotation.Y = -45f;
+        uniforms.front_camera.rotation.Y = 0f;
+        uniforms.right_camera.rotation.Y = 45f;
     }
 
     Rid _uniformBuffer;
@@ -234,20 +266,21 @@ public partial class test4 : Node
     private void ExecuteComputeDispatch()
     {
         var leftTex = left_viewport.GetTexture();
+        var frontTex = front_viewport.GetTexture();
         var rightTex = right_viewport.GetTexture();
 
-        if (leftTex == null || rightTex == null) return;
+        if (leftTex == null || rightTex == null || frontTex == null) return;
 
         Image leftImg = leftTex.GetImage();
         Image rightImg = rightTex.GetImage();
+        Image frontImg = frontTex.GetImage();
 
-        //GD.Print($"Left Image Format: {leftImg.GetFormat()}, Size: {leftImg.GetData().Length} bytes");
-        //GD.Print($"Right Image Format: {rightImg.GetFormat()}, Size: {rightImg.GetData().Length} bytes");
 
         if (leftImg == null || rightImg == null) return;
 
         // Upload to storage textures using the correct API
         UploadImageDataToTexture(leftStorageTex, leftImg);
+        UploadImageDataToTexture(frontStorageTex, frontImg);
         UploadImageDataToTexture(rightStorageTex, rightImg);
 
 
@@ -276,6 +309,7 @@ public partial class test4 : Node
         {
             Marshal.StructureToPtr(uniforms, ptr, false);
             Marshal.Copy(ptr, _uniformBytes, 0, _uniformSize);
+            GD.Print("Uniform buffer updated.");
         }
         finally
         {
@@ -296,6 +330,11 @@ public partial class test4 : Node
 
     [Export]
     public float right_gate = 1920f;
+
+    [Export]
+    public float x_rate = 1;
+    [Export]
+    public float y_rate = 1;
 
 	static int frameCount = 1;
 	public override void _Process(double delta)

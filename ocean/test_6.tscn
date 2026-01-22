@@ -1,7 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://c2wbws5kqoush"]
+[gd_scene load_steps=24 format=3 uid="uid://xppdqrbmp0af"]
 
-[ext_resource type="Material" uid="uid://dsfg2esujfyij" path="res://Materials/mat1.tres" id="1_d61hk"]
-[ext_resource type="Script" uid="uid://bxjkqar2fnote" path="res://script/test4.cs" id="2_qxfyu"]
+[ext_resource type="Material" uid="uid://dsfg2esujfyij" path="res://Materials/mat1.tres" id="1_kccru"]
+[ext_resource type="Script" uid="uid://bxjkqar2fnote" path="res://script/test4.cs" id="2_kymp7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2x8vs"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -29,7 +29,7 @@ albedo_color = Color(0.4351923, 0.43519226, 0.43519226, 1)
 material = SubResource("StandardMaterial3D_2x8vs")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_2x8vs"]
-material = ExtResource("1_d61hk")
+material = ExtResource("1_kccru")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lnpje"]
 albedo_color = Color(1, 0.54509807, 1, 1)
@@ -172,7 +172,7 @@ keep_aspect = 0
 fov = 52.0
 
 [node name="Code" type="Node" parent="." node_paths=PackedStringArray("left_viewport", "front_viewport", "right_viewport", "resultDisplay")]
-script = ExtResource("2_qxfyu")
+script = ExtResource("2_kymp7")
 left_viewport = NodePath("../Left")
 front_viewport = NodePath("../Front")
 right_viewport = NodePath("../Right")
