@@ -102,7 +102,7 @@ void ProjectPixelToSphere(const CameraParameter& cam, const vec2& pixel, vec3& s
 void SphereDirToAngle(const vec3& dir, float& horizontal_angle, float& vertical_angle) {
     horizontal_angle = atan2(dir.x, dir.z);
     horizontal_angle = RadToDeg(horizontal_angle);
-    if (horizontal_angle < 0) horizontal_angle += 360;
+    // 保持水平角范围在-180到180度
     
     vertical_angle = asin(dir.y);
     vertical_angle = RadToDeg(vertical_angle);
