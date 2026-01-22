@@ -11,6 +11,15 @@
 #include "vec3.h"
 #include "vec4.h"
 
+// 球面投影相关常量
+const float HORIZONTAL_FOV = 142.0f;    // 水平视场角
+const float HORIZONTAL_FOV_HALF = 71.0f; // 水平视场角的一半
+const float VERTICAL_FOV = 32.0f;        // 垂直视场角
+const float VERTICAL_FOV_HALF = 16.0f;   // 垂直视场角的一半
+const int PIXELS_PER_DEGREE = 10;        // 每度的像素数
+const int SPHERE_WIDTH = static_cast<int>(HORIZONTAL_FOV * PIXELS_PER_DEGREE);  // 球面数据宽度
+const int SPHERE_HEIGHT = static_cast<int>(VERTICAL_FOV * PIXELS_PER_DEGREE);    // 球面数据高度
+
 inline float DegToRad(float deg) {
     return deg * PI / 180.0f;
 }
@@ -54,9 +63,9 @@ std::vector<std::vector<vec4>> frontImage(configData.front_camera.h, std::vector
 std::vector<std::vector<vec4>> rightImage(configData.right_camera.h, std::vector<vec4>(configData.right_camera.w));
 
 //水平方向为142度，垂直方向为32度，每一度可以分割为水平垂直10*10个像素点，每个像素点保存一个vec4，分别为RGB和透明度
-std::vector<std::vector<vec4>> sphereData(142*10, std::vector<vec4>(32*10));
+std::vector<std::vector<vec4>> sphereData(SPHERE_WIDTH, std::vector<vec4>(SPHERE_HEIGHT));
 
-// 从相机像素坐标到球面坐标的转换
+// 将相机像素坐标转换为球面方向向量，考虑相机的内参和外参
 void ProjectPixelToSphere(const CameraParameter& cam, const vec2& pixel, vec3& sphere_dir) {
     // 像素坐标到相机坐标系
     float x = (pixel.x - cam.cx) / cam.fx;
@@ -110,17 +119,17 @@ void SphereDirToAngle(const vec3& dir, float& horizontal_angle, float& vertical_
 
 // 从球面坐标计算球面数据的索引
 ivec2 SphereAngleToIndex(float horizontal_angle, float vertical_angle) {
-    // 水平方向：142度，每度10个像素
-    // 垂直方向：32度，每度10个像素
-    // 水平角范围：-71到71度
-    // 垂直角范围：-16到16度
+    // 水平方向：HORIZONTAL_FOV度，每度PIXELS_PER_DEGREE个像素
+    // 垂直方向：VERTICAL_FOV度，每度PIXELS_PER_DEGREE个像素
+    // 水平角范围：-HORIZONTAL_FOV_HALF到HORIZONTAL_FOV_HALF度
+    // 垂直角范围：-VERTICAL_FOV_HALF到VERTICAL_FOV_HALF度
     
-    int h_index = static_cast<int>((horizontal_angle - (-71)) * 10);
-    int v_index = static_cast<int>((vertical_angle - (-16)) * 10);
+    int h_index = static_cast<int>((horizontal_angle - (-HORIZONTAL_FOV_HALF)) * PIXELS_PER_DEGREE);
+    int v_index = static_cast<int>((vertical_angle - (-VERTICAL_FOV_HALF)) * PIXELS_PER_DEGREE);
     
     // 确保索引在有效范围内
-    h_index = std::max(0, std::min(h_index, 142*10 - 1));
-    v_index = std::max(0, std::min(v_index, 32*10 - 1));
+    h_index = std::max(0, std::min(h_index, SPHERE_WIDTH - 1));
+    v_index = std::max(0, std::min(v_index, SPHERE_HEIGHT - 1));
     
     return ivec2(h_index, v_index);
 }
@@ -133,8 +142,8 @@ void ProjectSphereToOutput(const std::vector<std::vector<vec4>>& sphere_data, st
             float u = static_cast<float>(x) / output_width;
             float v = static_cast<float>(y) / output_height;
             
-            float horizontal_angle = (u - 0.5f) * 142;
-            float vertical_angle = (v - 0.5f) * 32;
+            float horizontal_angle = (u - 0.5f) * HORIZONTAL_FOV;
+            float vertical_angle = (v - 0.5f) * VERTICAL_FOV;
             
             // 转换为球面数据索引
             ivec2 index = SphereAngleToIndex(horizontal_angle, vertical_angle);
@@ -264,8 +273,8 @@ int main()
     stbi_image_free(right_data);
     
     // 创建输出图片
-    int output_width = 1420;
-    int output_height = 320;
+    int output_width = SPHERE_WIDTH;
+    int output_height = SPHERE_HEIGHT;
     std::vector<unsigned char> output_data(output_width * output_height * 4);
     
     // 将球面数据投影到输出图片
