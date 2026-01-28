@@ -83,7 +83,7 @@ mesh = SubResource("BoxMesh_2x8vs")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="env"]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
 mesh = SubResource("PlaneMesh_2x8vs")
 skeleton = NodePath("../..")
 
@@ -127,6 +127,15 @@ transform = Transform3D(0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.70710
 mesh = SubResource("SphereMesh_qru2l")
 skeleton = NodePath("../../Left/Camera3D")
 
+[node name="LeftLeft" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="LeftLeft"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
 [node name="Left" type="SubViewport" parent="."]
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
@@ -154,12 +163,39 @@ transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.70710
 keep_aspect = 0
 fov = 52.0
 
-[node name="Right22_5" type="SubViewport" parent="."]
+[node name="RightRight" type="SubViewport" parent="."]
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="Right22_5"]
-transform = Transform3D(0.9238792, 0, -0.38268334, 0, 1, 0, 0.38268334, 0, 0.9238792, 0, 3, 20)
+[node name="Camera3D" type="Camera3D" parent="RightRight"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="TIR_Left" type="SubViewport" parent="."]
+size = Vector2i(640, 512)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="TIR_Left"]
+transform = Transform3D(0.8191521, 0, 0.5735765, 0, 1, 0, -0.5735765, 0, 0.8191521, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="TIR_Front" type="SubViewport" parent="."]
+size = Vector2i(640, 512)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="TIR_Front"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 20)
+keep_aspect = 0
+fov = 52.0
+
+[node name="TIR_Right" type="SubViewport" parent="."]
+size = Vector2i(640, 512)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="TIR_Right"]
+transform = Transform3D(0.8191521, 0, -0.5735765, 0, 1, 0, 0.5735765, 0, 0.8191521, 0, 3, 20)
 keep_aspect = 0
 fov = 52.0
 
@@ -172,19 +208,25 @@ transform = Transform3D(0.7071065, 0, -0.7071065, 0, 1, 0, 0.7071065, 0, 0.70710
 keep_aspect = 0
 fov = 52.0
 
-[node name="Code" type="Node" parent="." node_paths=PackedStringArray("left_viewport", "front_viewport", "right_viewport", "resultDisplay")]
+[node name="Code" type="Node" parent="." node_paths=PackedStringArray("leftleft_viewport", "left_viewport", "front_viewport", "right_viewport", "rightright_viewport", "tir_left_viewport", "tir_front_viewport", "tir_right_viewport", "resultDisplay")]
 script = ExtResource("2_qxfyu")
+leftleft_viewport = NodePath("../LeftLeft")
 left_viewport = NodePath("../Left")
 front_viewport = NodePath("../Front")
 right_viewport = NodePath("../Right")
+rightright_viewport = NodePath("../RightRight")
+tir_left_viewport = NodePath("../TIR_Left")
+tir_front_viewport = NodePath("../TIR_Front")
+tir_right_viewport = NodePath("../TIR_Right")
 resultDisplay = NodePath("../Control/output")
+tir_blend = 0.28
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 3840.0
 offset_bottom = 2400.0
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.4, 0.4)
 
 [node name="UI_Right" type="TextureRect" parent="Control"]
 modulate = Color(1, 1, 1, 0.5882353)
@@ -265,10 +307,10 @@ texture = SubResource("ViewportTexture_bqkbb")
 
 [node name="output" type="TextureRect" parent="Control"]
 layout_mode = 0
-offset_left = -138.0
-offset_top = 288.0
-offset_right = 5104.0
-offset_bottom = 1368.0
+offset_left = 214.99997
+offset_top = 305.0
+offset_right = 8715.0
+offset_bottom = 1385.0
 
 [node name="code_save_left" type="Node" parent="." node_paths=PackedStringArray("TargetViewport")]
 script = ExtResource("3_qru2l")
