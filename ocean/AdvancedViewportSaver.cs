@@ -61,8 +61,8 @@ public partial class AdvancedViewportSaver : Node
             }
             
             // 生成文件名
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            string fileName = $"{FileNamePrefix}_{timestamp}.png";
+            //string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string fileName = $"{FileNamePrefix}.png";
             string filePath = Path.Combine(SaveDirectory, fileName).Replace("\\", "/");
             
             // 确保目录存在

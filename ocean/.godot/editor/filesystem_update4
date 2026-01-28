@@ -1,2 +1,10 @@
-res://test2.tscn
-res://test4.tscn
+res://script/ai_test_scene.cs
+res://script/Water.cs
+res://script/test4.cs
+res://script/TestNode.cs
+res://script/compute_shader_merge_image.cs
+res://script/TestResource.cs
+res://AdvancedViewportSaver.cs
+res://script/test2.cs
+res://script/compute_shader_test.cs
+res://script/WaveCascadeParameters.cs

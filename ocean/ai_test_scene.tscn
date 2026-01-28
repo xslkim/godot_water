@@ -1,7 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://c2wbws5kqoush"]
+[gd_scene load_steps=25 format=3 uid="uid://dwqexwvih6nhg"]
 
 [ext_resource type="Material" uid="uid://dsfg2esujfyij" path="res://Materials/mat1.tres" id="1_d61hk"]
-[ext_resource type="Script" uid="uid://bxjkqar2fnote" path="res://script/test4.cs" id="2_qxfyu"]
+[ext_resource type="Script" path="res://script/ai_test_scene.cs" id="2_qxfyu"]
 [ext_resource type="Script" uid="uid://srxge52jplsy" path="res://AdvancedViewportSaver.cs" id="3_qru2l"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2x8vs"]
