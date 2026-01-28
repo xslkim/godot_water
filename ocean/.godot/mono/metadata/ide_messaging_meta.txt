@@ -1,2 +1,0 @@
-﻿14337
-D:/test/godot/bin/godot.windows.editor.dev.x86_64.mono.exe

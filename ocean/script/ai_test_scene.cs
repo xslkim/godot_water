@@ -394,9 +394,11 @@ public partial class ai_test_scene : Node
         uniforms.tir_left_camera.cx = 320;
         uniforms.tir_left_camera.cy = 256;
         
-        // 从相机的Transform获取旋转角度
+        // 从相机的Transform获取旋转角度 (X, Y, Z轴)
         Vector3 tirLeftRotation = tirLeftCam.GlobalTransform.Basis.GetEuler();
+        uniforms.tir_left_camera.rotation.X = -tirLeftRotation.X * 180f / Mathf.Pi;
         uniforms.tir_left_camera.rotation.Y = tirLeftRotation.Y * 180f / Mathf.Pi;
+        uniforms.tir_left_camera.rotation.Z = tirLeftRotation.Z * 180f / Mathf.Pi;
         
         // 从相机FOV计算fx
         float tirLeftFov = tirLeftCam.Fov * Mathf.Pi / 180f;
@@ -410,7 +412,9 @@ public partial class ai_test_scene : Node
         uniforms.tir_front_camera.cy = 256;
         
         Vector3 tirFrontRotation = tirFrontCam.GlobalTransform.Basis.GetEuler();
+        uniforms.tir_front_camera.rotation.X = -tirFrontRotation.X * 180f / Mathf.Pi;
         uniforms.tir_front_camera.rotation.Y = tirFrontRotation.Y * 180f / Mathf.Pi;
+        uniforms.tir_front_camera.rotation.Z = tirFrontRotation.Z * 180f / Mathf.Pi;
         
         float tirFrontFov = tirFrontCam.Fov * Mathf.Pi / 180f;
         uniforms.tir_front_camera.fx = 640f / (2f * Mathf.Tan(tirFrontFov / 2f));
@@ -423,7 +427,9 @@ public partial class ai_test_scene : Node
         uniforms.tir_right_camera.cy = 256;
         
         Vector3 tirRightRotation = tirRightCam.GlobalTransform.Basis.GetEuler();
+        uniforms.tir_right_camera.rotation.X = -tirRightRotation.X * 180f / Mathf.Pi;
         uniforms.tir_right_camera.rotation.Y = tirRightRotation.Y * 180f / Mathf.Pi;
+        uniforms.tir_right_camera.rotation.Z = tirRightRotation.Z * 180f / Mathf.Pi;
         
         float tirRightFov = tirRightCam.Fov * Mathf.Pi / 180f;
         uniforms.tir_right_camera.fx = 640f / (2f * Mathf.Tan(tirRightFov / 2f));

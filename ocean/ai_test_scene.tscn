@@ -177,7 +177,7 @@ size = Vector2i(640, 512)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="TIR_Left"]
-transform = Transform3D(0.8067074, -0.14224426, 0.5735765, 0.1736482, 0.9848077, 0, -0.5648626, 0.09960051, 0.8191522, 0, 3, 20)
+transform = Transform3D(0.8191522, 0, 0.5735765, 0, 1, 0, -0.5735765, 0, 0.8191522, 0, 3, 20)
 keep_aspect = 0
 fov = 52.0
 
@@ -219,7 +219,7 @@ tir_left_viewport = NodePath("../TIR_Left")
 tir_front_viewport = NodePath("../TIR_Front")
 tir_right_viewport = NodePath("../TIR_Right")
 resultDisplay = NodePath("../Control/output")
-tir_blend = 0.28
+tir_blend = 0.43
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

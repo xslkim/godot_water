@@ -1,4 +1,4 @@
-#[compute]
+﻿#[compute]
 #version 450
 #extension GL_EXT_samplerless_texture_functions : require
 
@@ -45,8 +45,8 @@ layout(std140, set = 0, binding = 9) uniform ConfigUBO
 } configData;
 
 const float PI = 3.14159265359;
-const float HORIZONTAL_FOV = 232.0; //142.0;
-const float VERTICAL_FOV = 28.0;
+const float HORIZONTAL_FOV = 250.0; //142.0;
+const float VERTICAL_FOV = 32.0;
 
 float DegToRad(float deg) {
     return deg * PI / 180.0;
