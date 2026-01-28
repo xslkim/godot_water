@@ -232,9 +232,9 @@ public partial class ai_test_scene : Node
 
     void initComputeUniforms(ref ComputeUniforms uniforms)
     {
-        uniforms.left_camera.rotation.Y = -45f;
+        uniforms.left_camera.rotation.Y = 45f;
         uniforms.front_camera.rotation.Y = 0f;
-        uniforms.right_camera.rotation.Y = 45f;
+        uniforms.right_camera.rotation.Y = -45f;
     }
 
     Rid _uniformBuffer;

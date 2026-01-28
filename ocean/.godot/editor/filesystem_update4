@@ -8,3 +8,4 @@ res://AdvancedViewportSaver.cs
 res://script/test2.cs
 res://script/compute_shader_test.cs
 res://script/WaveCascadeParameters.cs
+res://ai_test_scene.tscn

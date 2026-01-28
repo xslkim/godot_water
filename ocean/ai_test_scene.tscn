@@ -1,7 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://dwqexwvih6nhg"]
+[gd_scene load_steps=25 format=3 uid="uid://db4v7fbn5goak"]
 
 [ext_resource type="Material" uid="uid://dsfg2esujfyij" path="res://Materials/mat1.tres" id="1_d61hk"]
-[ext_resource type="Script" path="res://script/ai_test_scene.cs" id="2_qxfyu"]
+[ext_resource type="Script" uid="uid://db2r1mi8w56g1" path="res://script/ai_test_scene.cs" id="2_qxfyu"]
 [ext_resource type="Script" uid="uid://srxge52jplsy" path="res://AdvancedViewportSaver.cs" id="3_qru2l"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2x8vs"]
@@ -88,7 +88,7 @@ mesh = SubResource("PlaneMesh_2x8vs")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="env"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0581474, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.200983, 0, 0.06847668)
 mesh = SubResource("CapsuleMesh_2x8vs")
 surface_material_override/0 = SubResource("StandardMaterial3D_lnpje")
 
